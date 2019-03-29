@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="function_array">
+        <item>交易紀錄</item>
+        <item>餘額查詢</item>
+        <item>投資理財</item>
+        <item>聯絡人管理</item>
+        <item>離開</item>
+    </string-array>
+</resources>
