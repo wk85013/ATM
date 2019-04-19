@@ -1,5 +1,6 @@
 package ute.com.atm;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -149,5 +150,9 @@ public class LoginActivity extends AppCompatActivity {
     public void quit(View view) {
 
 
+    }
+
+    public void map(View view) {
+        startActivity(new Intent(this, MapsActivity.class));
     }
 }
