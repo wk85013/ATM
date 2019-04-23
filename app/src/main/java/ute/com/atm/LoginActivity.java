@@ -1,8 +1,14 @@
 package ute.com.atm;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,14 +35,51 @@ public class LoginActivity extends AppCompatActivity {
     private EditText ed_id;
     private CheckBox chk_remember;
     private String TAG = getClass().getName();
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.constrain_news, NewsFragment.getInstance());
+        transaction.commit();
+
+        //service
+        intent = new Intent(this, HelloService.class);
+        intent.putExtra("NAME", "T1");
+        startService(intent);
+        intent.putExtra("NAME", "T2");
+        startService(intent);
+        intent.putExtra("NAME", "T3");
+        startService(intent);
+
+
 //        settingsTest();
         findViews();
         new TestTask().execute("http://tw.yahoo.com");
+    }
+
+    BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i(TAG, "onReceive: hello " + intent.getAction());
+        }
+    };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter(HelloService.ACTION_HELLO_DONE);//過濾值
+        registerReceiver(receiver, filter);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        stopService(intent);
+        unregisterReceiver(receiver);
     }
 
     public class TestTask extends AsyncTask<String, Void, Integer> {
